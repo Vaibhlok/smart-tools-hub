@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4ade80;
+            --warning: #f59e0b;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            padding-bottom: 25px;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .tool-icon {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            font-size: 2.5rem;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .tool-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+            padding: 0 20px;
+        }
+        
+        .tool-card p {
+            color: #666;
+            padding: 0 20px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid var(--primary);
+        }
+        
+        .btn:hover {
+            background: transparent;
+            color: var(--primary);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .tips-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .tips-section h2 {
+            color: var(--secondary);
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+        
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .tip-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .tip-card h4 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .tip-card p {
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            border-top: 1px solid #eee;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Smart Tools Hub</h1>
+            <p>Career, Finance & Productivity Tools in One Place</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="tools-grid">
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h3>Resume Builder</h3>
+                <p>Create professional resumes in minutes with our easy-to-use builder. Customize templates and export as PDF.</p>
+                <a href="resume-builder.html" class="btn">Open Tool</a>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3>EMI Calculator</h3>
+                <p>Calculate your Equated Monthly Installment for loans with detailed breakdown of principal and interest.</p>
+                <a href="emi-calculator.html" class="btn">Open Tool</a>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <h3>Currency Converter</h3>
+                <p>Convert between 150+ currencies with real-time exchange rates. Historical charts also available.</p>
+                <a href="currency-converter.html" class="btn">Open Tool</a>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI Summarizer</h3>
+                <p>Summarize long articles, documents, or texts into concise paragraphs with AI-powered technology.</p>
+                <a href="ai-summarizer.html" class="btn">Open Tool</a>
+            </div>
+        </div>
+        
+        <div class="tips-section">
+            <h2>Tips & Guides</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h4>Resume Tips</h4>
+                    <p>Tailor your resume for each job application. Use action verbs and quantify achievements with numbers where possible.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h4>Finance Tips</h4>
+                    <p>Always compare loan options before borrowing. A lower interest rate can save you thousands over the loan tenure.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h4>AI & Productivity Tips</h4>
+                    <p>Use AI tools to automate repetitive tasks. Start by summarizing long emails or reports to save time daily.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Smart Tools Hub. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">
+                <a href="index.html" style="color: var(--primary); text-decoration: none;">Home</a> | 
+                <a href="resume-builder.html" style="color: var(--primary); text-decoration: none;">Resume Builder</a> | 
+                <a href="emi-calculator.html" style="color: var(--primary); text-decoration: none;">EMI Calculator</a> | 
+                <a href="currency-converter.html" style="color: var(--primary); text-decoration: none;">Currency Converter</a> | 
+                <a href="ai-summarizer.html" style="color: var(--primary); text-decoration: none;">AI Summarizer</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
