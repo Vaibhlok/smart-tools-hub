@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Builder | Smart Tools Hub</title>
+    <title>Advanced Resume Builder | Smart Tools Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -19,86 +19,56 @@
             --accent: #4cc9f0;
             --light: #f8f9fa;
             --dark: #212529;
+            --success: #28a745;
+            --danger: #dc3545;
         }
         
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: var(--dark);
             min-height: 100vh;
+            padding: 20px;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
         }
         
         header {
             background: linear-gradient(to right, var(--primary), var(--secondary));
             color: white;
             padding: 25px;
-            border-radius: 0 0 15px 15px;
+            border-radius: 15px;
             margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+            text-align: center;
         }
         
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
         
-        .logo a {
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
             color: white;
             text-decoration: none;
-        }
-        
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 20px;
-            font-weight: 500;
-            transition: opacity 0.3s;
-        }
-        
-        nav a:hover {
-            opacity: 0.9;
+            font-weight: bold;
+            background: rgba(0,0,0,0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
         }
         
         .app-container {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-        
-        .app-header {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        
-        .app-header h1 {
-            color: var(--secondary);
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-        
-        .app-header p {
-            color: #666;
-            font-size: 1.1rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .app-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
         }
         
         @media (max-width: 992px) {
-            .app-content {
+            .app-container {
                 grid-template-columns: 1fr;
             }
         }
@@ -113,9 +83,36 @@
         .section-title {
             color: var(--secondary);
             font-size: 1.5rem;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 2px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .add-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .remove-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 10px;
         }
         
         .form-group {
@@ -144,7 +141,7 @@
         }
         
         textarea {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
         }
         
@@ -160,6 +157,8 @@
             border: none;
             cursor: pointer;
             font-size: 1rem;
+            margin-right: 10px;
+            margin-top: 10px;
         }
         
         .btn:hover {
@@ -167,81 +166,112 @@
             transform: translateY(-2px);
         }
         
-        .btn-full {
-            width: 100%;
-            margin-top: 10px;
+        .btn-large {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            margin-top: 20px;
         }
         
         .btn-group {
             display: flex;
+            flex-wrap: wrap;
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 30px;
         }
         
-        .resume-preview {
+        .experience-item, .education-item {
             background: #f8f9fa;
+            padding: 20px;
             border-radius: 10px;
-            padding: 25px;
-            min-height: 600px;
-            font-family: 'Georgia', serif;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+            position: relative;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .item-title {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        /* Resume Preview Styles */
+        .resume-preview {
+            background: white;
+            border: 1px solid #e9ecef;
+            min-height: 800px;
+            padding: 40px;
+            font-family: 'Georgia', 'Times New Roman', serif;
         }
         
         .resume-header {
             background: var(--primary);
             color: white;
-            padding: 25px;
+            padding: 30px;
             border-radius: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
         
         .resume-name {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 5px;
         }
         
         .resume-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             opacity: 0.9;
+            margin-bottom: 15px;
         }
         
         .resume-contact {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 20px;
             font-size: 0.9rem;
         }
         
         .resume-section {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
         
         .resume-section-title {
             color: var(--secondary);
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 15px;
             padding-bottom: 5px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 2px solid #eee;
         }
         
         .resume-item {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
-        .item-title {
+        .item-position {
             font-weight: 600;
             font-size: 1.1rem;
+            color: #333;
         }
         
-        .item-subtitle {
+        .item-company, .item-institution {
             color: #666;
             font-style: italic;
             margin-bottom: 5px;
         }
         
-        .item-details {
+        .item-duration {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        
+        .item-description {
             color: #555;
             line-height: 1.5;
         }
@@ -250,249 +280,239 @@
             text-align: center;
             padding: 30px;
             color: #666;
-            border-top: 1px solid #eee;
             margin-top: 40px;
         }
         
         @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
+            .app-container {
+                padding: 10px;
             }
             
-            nav a {
-                margin: 0 10px;
+            .input-section, .preview-section {
+                padding: 20px;
             }
             
-            .app-header h1 {
-                font-size: 1.8rem;
+            .resume-preview {
+                padding: 20px;
+            }
+            
+            .resume-name {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <a href="index.html"><i class="fas fa-tools"></i> Smart Tools Hub</a>
-        </div>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="emi-calculator.html">EMI Calculator</a>
-            <a href="currency-converter.html">Currency Converter</a>
-            <a href="ai-summarizer.html">AI Summarizer</a>
-        </nav>
-    </header>
-    
     <div class="container">
+        <header>
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <h1><i class="fas fa-file-alt"></i> Advanced Resume Builder</h1>
+            <p>Create professional resumes with multiple experiences and education entries</p>
+        </header>
+        
         <div class="app-container">
-            <div class="app-header">
-                <h1>Resume Builder</h1>
-                <p>Create a professional resume in minutes. Fill in your details and preview your resume in real-time.</p>
-            </div>
-            
-            <div class="app-content">
-                <div class="input-section">
-                    <h2 class="section-title">Personal Information</h2>
-                    
-                    <div class="form-group">
-                        <label for="fullName">Full Name</label>
-                        <input type="text" id="fullName" placeholder="John Doe">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="jobTitle">Professional Title</label>
-                        <input type="text" id="jobTitle" placeholder="Software Engineer">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" placeholder="john.doe@example.com">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="text" id="phone" placeholder="(123) 456-7890">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="location">Location</label>
-                        <input type="text" id="location" placeholder="New York, NY">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="summary">Professional Summary</label>
-                        <textarea id="summary" placeholder="Experienced software engineer with 5+ years in web development..."></textarea>
-                    </div>
-                    
-                    <h2 class="section-title">Work Experience</h2>
-                    
-                    <div class="form-group">
-                        <label for="job1">Job Title 1</label>
-                        <input type="text" id="job1" placeholder="Senior Developer">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="company1">Company 1</label>
-                        <input type="text" id="company1" placeholder="Tech Corp Inc.">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="duration1">Duration 1</label>
-                        <input type="text" id="duration1" placeholder="2019 - Present">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="desc1">Job Description 1</label>
-                        <textarea id="desc1" placeholder="Led a team of 5 developers on multiple projects..."></textarea>
-                    </div>
-                    
-                    <h2 class="section-title">Education</h2>
-                    
-                    <div class="form-group">
-                        <label for="degree">Degree</label>
-                        <input type="text" id="degree" placeholder="Bachelor of Science in Computer Science">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="university">University</label>
-                        <input type="text" id="university" placeholder="University of Technology">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="gradYear">Graduation Year</label>
-                        <input type="text" id="gradYear" placeholder="2018">
-                    </div>
-                    
-                    <div class="btn-group">
-                        <button class="btn" onclick="updateResume()">Update Preview</button>
-                        <button class="btn" onclick="downloadResume()">Download as PDF</button>
-                        <button class="btn" onclick="resetForm()">Reset Form</button>
+            <div class="input-section">
+                <h2 class="section-title">Personal Information</h2>
+                
+                <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input type="text" id="fullName" placeholder="John Doe" value="John Doe">
+                </div>
+                
+                <div class="form-group">
+                    <label for="jobTitle">Professional Title *</label>
+                    <input type="text" id="jobTitle" placeholder="Software Engineer" value="Senior Software Engineer">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" placeholder="john.doe@example.com" value="john.doe@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="phone" placeholder="(123) 456-7890" value="(123) 456-7890">
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" placeholder="New York, NY" value="New York, NY">
+                </div>
+                
+                <div class="form-group">
+                    <label for="linkedin">LinkedIn Profile</label>
+                    <input type="url" id="linkedin" placeholder="https://linkedin.com/in/johndoe" value="https://linkedin.com/in/johndoe">
+                </div>
+                
+                <div class="form-group">
+                    <label for="summary">Professional Summary *</label>
+                    <textarea id="summary" placeholder="Experienced professional with 5+ years in...">Experienced software engineer with 5+ years in web development, specializing in JavaScript, React, and Node.js. Proven track record of delivering high-quality software solutions and leading development teams.</textarea>
+                </div>
+                
+                <h2 class="section-title">
+                    Work Experience
+                    <button class="add-btn" onclick="addExperience()">
+                        <i class="fas fa-plus"></i> Add Experience
+                    </button>
+                </h2>
+                
+                <div id="experienceContainer">
+                    <!-- Experience items will be added here -->
+                    <div class="experience-item" id="experience-1">
+                        <div class="item-header">
+                            <div class="item-title">Work Experience #1</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Job Title *</label>
+                            <input type="text" class="exp-title" placeholder="Senior Developer" value="Senior Software Engineer">
+                        </div>
+                        <div class="form-group">
+                            <label>Company Name *</label>
+                            <input type="text" class="exp-company" placeholder="Tech Corp Inc." value="Tech Innovations Inc.">
+                        </div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" class="exp-location" placeholder="New York, NY" value="New York, NY">
+                        </div>
+                        <div class="form-group">
+                            <label>Duration *</label>
+                            <input type="text" class="exp-duration" placeholder="2019 - Present" value="2019 - Present">
+                        </div>
+                        <div class="form-group">
+                            <label>Job Description</label>
+                            <textarea class="exp-description" placeholder="Describe your responsibilities and achievements...">Led a team of 5 developers on multiple projects. Improved application performance by 40% through optimization techniques. Implemented CI/CD pipeline reducing deployment time by 60%.</textarea>
+                        </div>
+                        <button class="remove-btn" onclick="removeExperience('experience-1')">
+                            <i class="fas fa-trash"></i> Remove This Experience
+                        </button>
                     </div>
                 </div>
                 
-                <div class="preview-section">
-                    <h2 class="section-title">Resume Preview</h2>
-                    <div class="resume-preview" id="resumePreview">
-                        <!-- Resume preview will be generated here -->
-                        <div class="resume-header">
-                            <div class="resume-name" id="previewName">John Doe</div>
-                            <div class="resume-title" id="previewTitle">Software Engineer</div>
-                            <div class="resume-contact">
-                                <div id="previewEmail">john.doe@example.com</div>
-                                <div id="previewPhone">(123) 456-7890</div>
-                                <div id="previewLocation">New York, NY</div>
-                            </div>
+                <h2 class="section-title">
+                    Education
+                    <button class="add-btn" onclick="addEducation()">
+                        <i class="fas fa-plus"></i> Add Education
+                    </button>
+                </h2>
+                
+                <div id="educationContainer">
+                    <!-- Education items will be added here -->
+                    <div class="education-item" id="education-1">
+                        <div class="item-header">
+                            <div class="item-title">Education #1</div>
                         </div>
-                        
-                        <div class="resume-section">
-                            <div class="resume-section-title">Professional Summary</div>
-                            <div class="resume-item">
-                                <div class="item-details" id="previewSummary">Experienced software engineer with 5+ years in web development, specializing in JavaScript, React, and Node.js. Proven track record of delivering high-quality software solutions.</div>
-                            </div>
+                        <div class="form-group">
+                            <label>Degree *</label>
+                            <input type="text" class="edu-degree" placeholder="Bachelor of Science in Computer Science" value="Bachelor of Science in Computer Science">
                         </div>
-                        
-                        <div class="resume-section">
-                            <div class="resume-section-title">Work Experience</div>
-                            <div class="resume-item">
-                                <div class="item-title" id="previewJob1">Senior Developer</div>
-                                <div class="item-subtitle" id="previewCompany1">Tech Corp Inc. | <span id="previewDuration1">2019 - Present</span></div>
-                                <div class="item-details" id="previewDesc1">Led a team of 5 developers on multiple projects. Improved application performance by 40% through optimization techniques.</div>
-                            </div>
+                        <div class="form-group">
+                            <label>Institution *</label>
+                            <input type="text" class="edu-institution" placeholder="University of Technology" value="University of Technology">
                         </div>
-                        
-                        <div class="resume-section">
-                            <div class="resume-section-title">Education</div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" class="edu-location" placeholder="City, State" value="Boston, MA">
+                        </div>
+                        <div class="form-group">
+                            <label>Graduation Year *</label>
+                            <input type="text" class="edu-year" placeholder="2018" value="2018">
+                        </div>
+                        <div class="form-group">
+                            <label>GPA / Honors (Optional)</label>
+                            <input type="text" class="edu-gpa" placeholder="3.8/4.0 GPA, Magna Cum Laude" value="3.8/4.0 GPA, Magna Cum Laude">
+                        </div>
+                        <button class="remove-btn" onclick="removeEducation('education-1')">
+                            <i class="fas fa-trash"></i> Remove This Education
+                        </button>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">Skills</h2>
+                
+                <div class="form-group">
+                    <label>Technical Skills (comma separated)</label>
+                    <textarea id="skills" placeholder="JavaScript, React, Node.js, Python, AWS, Docker...">JavaScript, React, Node.js, Python, AWS, Docker, Git, MongoDB, SQL, REST APIs</textarea>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-large" onclick="generateResume()">
+                        <i class="fas fa-sync-alt"></i> Update Resume Preview
+                    </button>
+                    <button class="btn btn-large" onclick="saveResume()" style="background: var(--success);">
+                        <i class="fas fa-download"></i> Download as PDF
+                    </button>
+                    <button class="btn btn-large" onclick="resetForm()" style="background: var(--danger);">
+                        <i class="fas fa-redo"></i> Reset All
+                    </button>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <h2 class="section-title">Resume Preview</h2>
+                <p>Your changes appear in real-time below</p>
+                
+                <div class="resume-preview" id="resumePreview">
+                    <!-- Resume preview will be generated here -->
+                    <div class="resume-header">
+                        <div class="resume-name" id="previewName">John Doe</div>
+                        <div class="resume-title" id="previewTitle">Senior Software Engineer</div>
+                        <div class="resume-contact">
+                            <div id="previewEmail">john.doe@example.com</div>
+                            <div id="previewPhone">(123) 456-7890</div>
+                            <div id="previewLocation">New York, NY</div>
+                            <div id="previewLinkedin">linkedin.com/in/johndoe</div>
+                        </div>
+                    </div>
+                    
+                    <div class="resume-section">
+                        <div class="resume-section-title">Professional Summary</div>
+                        <div class="resume-item">
+                            <div class="item-description" id="previewSummary">Experienced software engineer with 5+ years in web development, specializing in JavaScript, React, and Node.js. Proven track record of delivering high-quality software solutions and leading development teams.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="resume-section">
+                        <div class="resume-section-title">Work Experience</div>
+                        <div id="previewExperience">
                             <div class="resume-item">
-                                <div class="item-title" id="previewDegree">Bachelor of Science in Computer Science</div>
-                                <div class="item-subtitle" id="previewUniversity">University of Technology | <span id="previewGradYear">2018</span></div>
-                                <div class="item-details">Graduated with Honors. Relevant coursework: Data Structures, Algorithms, Web Development.</div>
+                                <div class="item-position">Senior Software Engineer</div>
+                                <div class="item-company">Tech Innovations Inc.</div>
+                                <div class="item-duration">2019 - Present | New York, NY</div>
+                                <div class="item-description">Led a team of 5 developers on multiple projects. Improved application performance by 40% through optimization techniques. Implemented CI/CD pipeline reducing deployment time by 60%.</div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="btn-group">
-                        <button class="btn btn-full" onclick="printResume()">Print Resume</button>
+                    <div class="resume-section">
+                        <div class="resume-section-title">Education</div>
+                        <div id="previewEducation">
+                            <div class="resume-item">
+                                <div class="item-position">Bachelor of Science in Computer Science</div>
+                                <div class="item-institution">University of Technology</div>
+                                <div class="item-duration">Graduated 2018 | Boston, MA</div>
+                                <div class="item-description">3.8/4.0 GPA, Magna Cum Laude</div>
+                            </div>
+                        </div>
                     </div>
+                    
+                    <div class="resume-section">
+                        <div class="resume-section-title">Technical Skills</div>
+                        <div class="resume-item">
+                            <div class="item-description" id="previewSkills">JavaScript, React, Node.js, Python, AWS, Docker, Git, MongoDB, SQL, REST APIs</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn" onclick="printResume()">
+                        <i class="fas fa-print"></i> Print Resume
+                    </button>
+                    <button class="btn" onclick="shareResume()">
+                        <i class="fas fa-share-alt"></i> Share Resume
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Smart Tools Hub. All rights reserved.</p>
-            <p style="margin-top: 10px; font-size: 0.9rem;">
-                <a href="index.html" style="color: var(--primary); text-decoration: none;">Home</a> | 
-                <a href="emi-calculator.html" style="color: var(--primary); text-decoration: none;">EMI Calculator</a> | 
-                <a href="currency-converter.html" style="color: var(--primary); text-decoration: none;">Currency Converter</a> | 
-                <a href="ai-summarizer.html" style="color: var(--primary); text-decoration: none;">AI Summarizer</a>
-            </p>
-        </div>
-    </footer>
-    
-    <script>
-        // Function to update resume preview
-        function updateResume() {
-            // Personal Information
-            document.getElementById('previewName').textContent = 
-                document.getElementById('fullName').value || 'John Doe';
-            document.getElementById('previewTitle').textContent = 
-                document.getElementById('jobTitle').value || 'Software Engineer';
-            document.getElementById('previewEmail').textContent = 
-                document.getElementById('email').value || 'john.doe@example.com';
-            document.getElementById('previewPhone').textContent = 
-                document.getElementById('phone').value || '(123) 456-7890';
-            document.getElementById('previewLocation').textContent = 
-                document.getElementById('location').value || 'New York, NY';
-            document.getElementById('previewSummary').textContent = 
-                document.getElementById('summary').value || 'Experienced software engineer with 5+ years in web development, specializing in JavaScript, React, and Node.js. Proven track record of delivering high-quality software solutions.';
-            
-            // Work Experience
-            document.getElementById('previewJob1').textContent = 
-                document.getElementById('job1').value || 'Senior Developer';
-            document.getElementById('previewCompany1').textContent = 
-                document.getElementById('company1').value || 'Tech Corp Inc.';
-            document.getElementById('previewDuration1').textContent = 
-                document.getElementById('duration1').value || '2019 - Present';
-            document.getElementById('previewDesc1').textContent = 
-                document.getElementById('desc1').value || 'Led a team of 5 developers on multiple projects. Improved application performance by 40% through optimization techniques.';
-            
-            // Education
-            document.getElementById('previewDegree').textContent = 
-                document.getElementById('degree').value || 'Bachelor of Science in Computer Science';
-            document.getElementById('previewUniversity').textContent = 
-                document.getElementById('university').value || 'University of Technology';
-            document.getElementById('previewGradYear').textContent = 
-                document.getElementById('gradYear').value || '2018';
-            
-            alert('Resume updated! Your changes are now visible in the preview.');
-        }
-        
-        // Function to download resume as PDF
-        function downloadResume() {
-            alert('In a real application, this would generate and download a PDF of your resume. For now, you can use the Print function.');
-        }
-        
-        // Function to reset form
-        function resetForm() {
-            if (confirm('Are you sure you want to reset all fields? This cannot be undone.')) {
-                document.querySelectorAll('.input-section input, .input-section textarea').forEach(element => {
-                    element.value = '';
-                });
-                updateResume();
-            }
-        }
-        
-        // Function to print resume
-        function printResume() {
-            window.print();
-        }
-        
-        // Initialize with default values
-        window.onload = function() {
-            updateResume();
-        };
-    </script>
-</body>
-          </html>
+   
