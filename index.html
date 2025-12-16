@@ -58,6 +58,34 @@
             opacity: 0.9;
         }
         
+        /* Navigation Styles */
+        .main-nav {
+            margin-top: 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -129,6 +157,65 @@
             color: white;
         }
         
+        /* Blog Preview Section */
+        .blog-preview {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .blog-preview h2 {
+            color: var(--secondary);
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .blog-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .blog-card h4 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .blog-card p {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .blog-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .blog-link:hover {
+            text-decoration: underline;
+        }
+        
         .tips-section {
             background: white;
             border-radius: 15px;
@@ -176,6 +263,21 @@
             margin-top: 30px;
         }
         
+        .footer-links {
+            margin-top: 15px;
+        }
+        
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
         @media (max-width: 768px) {
             .tools-grid {
                 grid-template-columns: 1fr;
@@ -183,6 +285,15 @@
             
             header h1 {
                 font-size: 2.2rem;
+            }
+            
+            .nav-links {
+                gap: 10px;
+            }
+            
+            .nav-links a {
+                padding: 6px 12px;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -192,6 +303,18 @@
         <div class="container">
             <h1>Smart Tools Hub</h1>
             <p>Career, Finance & Productivity Tools in One Place</p>
+            
+            <nav class="main-nav">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="resume-builder.html">Resume Builder</a></li>
+                    <li><a href="emi-calculator.html">EMI Calculator</a></li>
+                    <li><a href="currency-converter.html">Currency Converter</a></li>
+                    <li><a href="ai-summarizer.html">AI Summarizer</a></li>
+                    <li><a href="pdf-tools.html">PDF Tools</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
     
@@ -232,6 +355,43 @@
                 <p>Summarize long articles, documents, or texts into concise paragraphs with AI-powered technology.</p>
                 <a href="ai-summarizer.html" class="btn">Open Tool</a>
             </div>
+            
+            <!-- NEW PDF TOOL CARD -->
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <h3>PDF Tools</h3>
+                <p>Merge multiple PDFs, convert images to PDF, split PDF pages, and compress PDF files easily.</p>
+                <a href="pdf-tools.html" class="btn">Open Tool</a>
+            </div>
+        </div>
+        
+        <!-- NEW BLOG PREVIEW SECTION -->
+        <div class="blog-preview">
+            <h2>Latest Blog Posts</h2>
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <h4>How to Write an ATS-Friendly Resume</h4>
+                    <p>Learn the secrets to make your resume pass through Applicant Tracking Systems and reach human recruiters.</p>
+                    <a href="blog-ats-resume.html" class="blog-link">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="blog-card">
+                    <h4>Understanding Loan EMI Calculations</h4>
+                    <p>A comprehensive guide on how EMI is calculated and tips to reduce your loan burden.</p>
+                    <a href="blog-emi-guide.html" class="blog-link">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="blog-card">
+                    <h4>PDF Management Best Practices</h4>
+                    <p>Organize, merge, and secure your PDF documents like a pro with these simple techniques.</p>
+                    <a href="blog-pdf-tips.html" class="blog-link">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="blog.html" class="btn btn-outline">View All Blog Posts</a>
+            </div>
         </div>
         
         <div class="tips-section">
@@ -258,13 +418,17 @@
     <footer>
         <div class="container">
             <p>&copy; 2025 Smart Tools Hub. All rights reserved.</p>
-            <p style="margin-top: 10px; font-size: 0.9rem;">
-                <a href="index.html" style="color: var(--primary); text-decoration: none;">Home</a> | 
-                <a href="resume-builder.html" style="color: var(--primary); text-decoration: none;">Resume Builder</a> | 
-                <a href="emi-calculator.html" style="color: var(--primary); text-decoration: none;">EMI Calculator</a> | 
-                <a href="currency-converter.html" style="color: var(--primary); text-decoration: none;">Currency Converter</a> | 
-                <a href="ai-summarizer.html" style="color: var(--primary); text-decoration: none;">AI Summarizer</a>
-            </p>
+            <div class="footer-links">
+                <a href="index.html">Home</a> | 
+                <a href="resume-builder.html">Resume Builder</a> | 
+                <a href="emi-calculator.html">EMI Calculator</a> | 
+                <a href="currency-converter.html">Currency Converter</a> | 
+                <a href="ai-summarizer.html">AI Summarizer</a> | 
+                <a href="pdf-tools.html">PDF Tools</a> | 
+                <a href="blog.html">Blog</a> | 
+                <a href="privacy.html">Privacy Policy</a> | 
+                <a href="terms.html">Terms of Service</a>
+            </div>
         </div>
     </footer>
 </body>
