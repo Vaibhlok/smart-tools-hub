@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Tools - Smart Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+        
+        .tools-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+        
+        .sidebar h3 {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tool-options {
+            list-style: none;
+        }
+        
+        .tool-options li {
+            margin-bottom: 15px;
+        }
+        
+        .tool-options a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .tool-options a:hover, .tool-options a.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .tool-options i {
+            font-size: 1.2rem;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .tool-section {
+            display: none;
+        }
+        
+        .tool-section.active {
+            display: block;
+        }
+        
+        .tool-header {
+            margin-bottom: 25px;
+        }
+        
+        .tool-header h2 {
+            color: var(--secondary);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #666;
+        }
+        
+        .upload-area {
+            border: 3px dashed #ddd;
+            border-radius: 15px;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+        
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--primary);
+            background: #f0f7ff;
+        }
+        
+        .upload-area i {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .upload-area h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        .upload-area p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .upload-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .upload-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .file-list {
+            margin-top: 20px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .file-info i {
+            color: var(--danger);
+            font-size: 1.5rem;
+        }
+        
+        .remove-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .process-btn {
+            background: var(--success);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .process-btn:hover {
+            background: #0da271;
+            transform: translateY(-2px);
+        }
+        
+        .reset-btn {
+            background: #6b7280;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .reset-btn:hover {
+            background: #4b5563;
+        }
+        
+        .result-area {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f9ff;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            display: none;
+        }
+        
+        .result-area.show {
+            display: block;
+        }
+        
+        .result-area h4 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        .download-btn:hover {
+            background: #0da271;
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #666;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+        
+        .footer-links {
+            margin-top: 15px;
+        }
+        
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 900px) {
+            .tools-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .back-btn {
+                position: relative;
+                left: 0;
+                top: 0;
+                display: inline-block;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            <h1>PDF Tools</h1>
+            <p>Merge, convert, split, and compress PDF files with ease. All processing done in your browser.</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="tools-container">
+            <div class="sidebar">
+                <h3>PDF Tools</h3>
+                <ul class="tool-options">
+                    <li><a href="#merge" class="active" data-tool="merge"><i class="fas fa-layer-group"></i> Merge PDF</a></li>
+                    <li><a href="#split" data-tool="split"><i class="fas fa-cut"></i> Split PDF</a></li>
+                    <li><a href="#convert" data-tool="convert"><i class="fas fa-exchange-alt"></i> Convert to PDF</a></li>
+                    <li><a href="#compress" data-tool="compress"><i class="fas fa-compress-alt"></i> Compress PDF</a></li>
+                    <li><a href="#watermark" data-tool="watermark"><i class="fas fa-tint"></i> Add Watermark</a></li>
+                </ul>
+                
+                <div style="margin-top: 30px; padding: 15px; background: #f0f7ff; border-radius: 10px;">
+                    <h4 style="color: var(--secondary); margin-bottom: 10px; font-size: 1rem;">How it works</h4>
+                    <p style="color: #666; font-size: 0.9rem; line-height: 1.5;">
+                        1. Select a tool from the left<br>
+                        2. Upload your files<br>
+                        3. Process the files<br>
+                        4. Download the result
+                    </p>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <!-- Merge PDF Tool -->
+                <div id="merge-tool" class="tool-section active">
+                    <div class="tool-header">
+                        <h2>Merge PDF Files</h2>
+                        <p>Combine multiple PDF documents into a single file. Drag and drop to rearrange pages.</p>
+                    </div>
+                    
+                    <div class="upload-area" id="merge-upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h4>Drop PDF files here</h4>
+                        <p>or click to browse</p>
+                        <input type="file" id="merge-file-input" accept=".pdf" multiple style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('merge-file-input').click()">Select PDF Files</button>
+                        <p style="margin-top: 10px; font-size: 0.9rem; color: #888;">Maximum 10 files, 50MB each</p>
+                    </div>
+                    
+                    <div class="file-list" id="merge-file-list">
+                        <!-- Files will be added here dynamically -->
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="process-btn" id="merge-btn"><i class="fas fa-layer-group"></i> Merge PDFs</button>
+                        <button class="reset-btn" id="merge-reset-btn"><i class="fas fa-redo"></i> Reset</button>
+                    </div>
+                    
+                    <div class="result-area" id="merge-result">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> PDFs Merged Successfully!</h4>
+                        <p>Your files have been combined into a single PDF document. Click below to download.</p>
+                        <a href="#" class="download-btn" id="merge-download-btn"><i class="fas fa-download"></i> Download Merged PDF</a>
+                    </div>
+                </div>
+                
+                <!-- Split PDF Tool -->
+                <div id="split-tool" class="tool-section">
+                    <div class="tool-header">
+                        <h2>Split PDF File</h2>
+                        <p>Extract specific pages or split a PDF into multiple documents.</p>
+                    </div>
+                    
+                    <div class="upload-area">
+                        <i class="fas fa-cut"></i>
+                        <h4>Upload PDF to split</h4>
+                        <p>Select a PDF file to extract pages from</p>
+                        <input type="file" id="split-file-input" accept=".pdf" style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('split-file-input').click()">Select PDF File</button>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4 style="color: var(--secondary); margin-bottom: 15px;">Split Options</h4>
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 200px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Split by Pages</label>
+                                <input type="text" placeholder="e.g., 1-3, 5, 7-10" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                                <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">Enter page ranges separated by commas</p>
+                            </div>
+                            <div style="flex: 1; min-width: 200px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Split Every</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="number" value="1" min="1" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                                    <select style="padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                                        <option>pages</option>
+                                        <option>sections</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="process-btn"><i class="fas fa-cut"></i> Split PDF</button>
+                        <button class="reset-btn"><i class="fas fa-redo"></i> Reset</button>
+                    </div>
+                </div>
+                
+                <!-- Convert to PDF Tool -->
+                <div id="convert-tool" class="tool-section">
+                    <div class="tool-header">
+                        <h2>Convert to PDF</h2>
+                        <p>Convert images (JPG, PNG) and documents to PDF format.</p>
+                    </div>
+                    
+                    <div class="upload-area">
+                        <i class="fas fa-file-import"></i>
+                        <h4>Upload files to convert</h4>
+                        <p>Supported formats: JPG, PNG, DOC, DOCX, TXT</p>
+                        <input type="file" id="convert-file-input" accept=".jpg,.jpeg,.png,.doc,.docx,.txt" multiple style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('convert-file-input').click()">Select Files</button>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="process-btn"><i class="fas fa-file-pdf"></i> Convert to PDF</button>
+                        <button class="reset-btn"><i class="fas fa-redo"></i> Reset</button>
+                    </div>
+                </div>
+                
+                <!-- Compress PDF Tool -->
+                <div id="compress-tool" class="tool-section">
+                    <div class="tool-header">
+                        <h2>Compress PDF</h2>
+                        <p>Reduce PDF file size while maintaining quality.</p>
+                    </div>
+                    
+                    <div class="upload-area">
+                        <i class="fas fa-compress-alt"></i>
+                        <h4>Upload PDF to compress</h4>
+                        <p>Reduce file size for easier sharing and storage</p>
+                        <input type="file" id="compress-file-input" accept=".pdf" style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('compress-file-input').click()">Select PDF File</button>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4 style="color: var(--secondary); margin-bottom: 15px;">Compression Level</h4>
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 200px;">
+                                <label style="display: block; margin-bottom: 10px;">
+                                    <input type="radio" name="compression" checked> Recommended (Balanced)
+                                </label>
+                                <p style="font-size: 0.9rem; color: #666; margin-left: 20px;">Good quality with smaller file size</p>
+                            </div>
+                            <div style="flex: 1; min-width: 200px;">
+                                <label style="display: block; margin-bottom: 10px;">
+                                    <input type="radio" name="compression"> Maximum Compression
+                                </label>
+                                <p style="font-size: 0.9rem; color: #666; margin-left: 20px;">Smallest file size, lower quality</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="process-btn"><i class="fas fa-compress-alt"></i> Compress PDF</button>
+                        <button class="reset-btn"><i class="fas fa-redo"></i> Reset</button>
+                    </div>
+                </div>
+                
+                <!-- Watermark PDF Tool -->
+                <div id="watermark-tool" class="tool-section">
+                    <div class="tool-header">
+                        <h2>Add Watermark to PDF</h2>
+                        <p>Add text or image watermark to your PDF documents.</p>
+                    </div>
+                    
+                    <div class="upload-area">
+                        <i class="fas fa-tint"></i>
+                        <h4>Upload PDF to watermark</h4>
+                        <p>Select a PDF file to add watermark to</p>
+                        <input type="file" id="watermark-file-input" accept=".pdf" style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('watermark-file-input').click()">Select PDF File</button>
+                  
