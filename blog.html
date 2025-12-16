@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Smart Tools Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #10b981;
+            --gray: #6b7280;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+        
+        /* Blog Categories */
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .category-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 30px;
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .category-btn:hover, .category-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .blog-image {
+            height: 200px;
+            background: linear-gradient(to right, #4361ee, #3a0ca3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .blog-content {
+            padding: 25px;
+        }
+        
+        .blog-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .blog-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #e0f2fe;
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .blog-title {
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .blog-excerpt {
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .read-more:hover {
+            gap: 12px;
+            color: var(--secondary);
+        }
+        
+        /* Featured Post */
+        .featured-post {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .featured-image {
+            background: linear-gradient(to right, #3a0ca3, #7209b7);
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+        }
+        
+        .featured-content {
+            padding: 40px;
+        }
+        
+        .featured-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            background: var(--success);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .featured-title {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        
+        .featured-excerpt {
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 25px;
+            font-size: 1.05rem;
+        }
+        
+        /* Newsletter */
+        .newsletter {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .newsletter h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .newsletter p {
+            opacity: 0.9;
+            margin-bottom: 25px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+            gap: 10px;
+        }
+        
+        .newsletter-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+        }
+        
+        .newsletter-btn {
+            padding: 15px 30px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .newsletter-btn:hover {
+            background: #0da271;
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            border-top: 1px solid #eee;
+            margin-top: 30px;
+        }
+        
+        .footer-links {
+            margin-top: 15px;
+        }
+        
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 900px) {
+            .featured-post {
+                grid-template-columns: 1fr;
+            }
+            
+            .featured-image {
+                min-height: 250px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .back-btn {
+                position: relative;
+                left: 0;
+                top: 0;
+                margin-bottom: 15px;
+                justify-content: center;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            <h1>Smart Tools Blog</h1>
+            <p>Expert tips, guides, and insights to maximize your productivity with our tools</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Featured Blog Post -->
+        <div class="featured-post">
+            <div class="featured-image">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="featured-content">
+                <span class="featured-badge">FEATURED</span>
+                <h2 class="featured-title">The Ultimate Guide to ATS-Friendly Resumes in 2025</h2>
+                <div class="blog-meta">
+                    <span><i class="far fa-calendar"></i> March 15, 2025</span>
+                    <span><i class="far fa-clock"></i> 8 min read</span>
+                    <span class="blog-category">Resume Tips</span>
+                </div>
+                <p class="featured-excerpt">Learn how to optimize your resume for Applicant Tracking Systems (ATS) used by 98% of Fortune 500 companies. Discover the secrets of keyword optimization, formatting do's and don'ts, and how to make your resume stand out in the digital age.</p>
+                <a href="blog-ats-resume.html" class="read-more">Read Full Article <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        
+        <!-- Blog Categories -->
+        <div class="categories">
+            <a href="#" class="category-btn active">All Posts</a>
+            <a href="#" class="category-btn">Resume Tips</a>
+            <a href="#" class="category-btn">Finance Guides</a>
+            <a href="#" class="category-btn">PDF Tools</a>
+            <a href="#" class="category-btn">AI & Productivity</a>
+            <a href="#" class="category-btn">Tutorials</a>
+        </div>
+        
+        <!-- Blog Posts Grid -->
+        <div class="blog-grid">
+            <!-- Post 1 -->
+            <div class="blog-card">
+                <div class="blog-image" style="background: linear-gradient(to right, #10b981, #059669);">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> March 10, 2025</span>
+                        <span><i class="far fa-clock"></i> 6 min read</span>
+                    </div>
+                    <span class="blog-category">Finance Guides</span>
+                    <h3 class="blog-title">Understanding EMI: How to Choose the Right Loan Plan</h3>
+                    <p class="blog-excerpt">A comprehensive guide to understanding Equated Monthly Installments, interest calculations, and how to choose the best loan option for your needs.</p>
+                    <a href="blog-emi-guide.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Post 2 -->
+            <div class="blog-card">
+                <div class="blog-image" style="background: linear-gradient(to right, #f59e0b, #d97706);">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> March 5, 2025</span>
+                        <span><i class="far fa-clock"></i> 5 min read</span>
+                    </div>
+                    <span class="blog-category">PDF Tools</span>
+                    <h3 class="blog-title">PDF Management Best Practices for Professionals</h3>
+                    <p class="blog-excerpt">Learn how to efficiently organize, merge, compress, and secure your PDF documents with our expert tips and tool recommendations.</p>
+                    <a href="blog-pdf-tips.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Post 3 -->
+            <div class="blog-card">
+                <div class="blog-image" style="background: linear-gradient(to right, #8b5cf6, #7c3aed);">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> February 28, 2025</span>
+                        <span><i class="far fa-clock"></i> 7 min read</span>
+                    </div>
+                    <span class="blog-category">AI & Productivity</span>
+                    <h3 class="blog-title">How AI Summarization is Revolutionizing Workplace Productivity</h3>
+                    <p class="blog-excerpt">Discover how AI-powered summarization tools can save you hours each week by automating document analysis and report generation.</p>
+                    <a href="blog-ai-productivity.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Post 4 -->
+            <div class="blog-card">
+                <div class="blog-image" style="background: linear-gradient(to right, #ec4899, #db2777);">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> February 22, 2025</span>
+                        <span><i class="far fa-clock"></i> 4 min read</span>
+                    </div>
+                    <span class="blog-category">Finance Guides</span>
+                    <h3 class="blog-title">Real-Time Currency Conversion: What You Need to Know</h3>
+                    <p class="blog-excerpt">Understanding exchange rates, conversion fees, and how to get the best rates when converting currencies for travel or business.</p>
+                    <a href="blog-currency-guide.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Post 5 -->
+            <div class="blog-card">
+                <div class="blog-image" style="background: linear-gradient(to right, #3b82f6, #1d4ed8);">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> February 18, 2025</span>
+                        <span><i class="far fa-clock"></i> 10 min read</span>
+                    </div>
+                    <span class="blog-category">Tutorials</span>
+                    <h3 class="blog-title">Getting Started with Smart Tools Hub: A Beginner's Guide</h3>
+                    <p class="blog-excerpt">Learn how to make the most of all our tools with this step-by-step guide for beginners. From resume building to PDF management.</p>
+                    <a href="blog-beginners-guide.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Post 6 -->
+            <div class="blog-card">
+                <div class="blog-image" style="background: linear-gradient(to right, #14b8a6, #0d9488);">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> February 12, 2025</span>
+                        <span><i class="far fa-clock"></i> 9 min read</span>
+                    </div>
+                    <span class="blog-category">Finance Guides</span>
+                    <h3 class="blog-title">5 Financial Planning Tools Every Young Professional Needs</h3>
+                    <p class="blog-excerpt">Essential tools and calculators for budgeting, saving, investing, and planning your financial future. Start building wealth today.</p>
+                    <a href="blog-financial-tools.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Newsletter Section -->
+        <div class="newsletter">
+            <h3>Stay Updated with Smart Tips</h3>
+            <p>Subscribe to our newsletter and get weekly productivity tips, tool updates, and exclusive content directly in your inbox.</p>
+            <form class="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+            <p style="font-size: 0.9rem; margin-top: 15px;">No spam, unsubscribe anytime.</p>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Smart Tools Hub. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="index.html">Home</a> | 
+                <a href="resume-builder.html">Resume Builder</a> | 
+                <a href="emi-calculator.html">EMI Calculator</a> | 
+                <a href="currency-converter.html">Currency Converter</a> | 
+                <a href="ai-summarizer.html">AI Summarizer</a> | 
+                <a href="pdf-tools.html">PDF Tools</a> | 
+                <a href="blog.html">Blog</a> | 
+                <a href="privacy.html">Privacy Policy</a> | 
+                <a href="terms.html">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Category filtering
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all buttons
+                document.querySelectorAll('.category-btn').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // In a real implementation, this would filter blog posts
+                // For now, we'll just show an alert
+                const category = this.textContent;
+                if (category !== 'All Posts') {
+                    alert(`Filtering by: ${category}\n\nIn a real implementation, this would filter the blog posts by category.`);
+                }
+            });
+        });
+        
+        // Newsletter form submission
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            alert(`Thank you for subscribing with: ${email}\n\nYou'll receive our 
