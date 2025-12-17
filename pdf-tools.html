@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Tools - Smart Tools Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- PDF Library -->
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <!-- For Word conversion simulation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.8/mammoth.browser.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -103,10 +99,10 @@
         }
         
         .tool-options li {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
-        .tool-options a {
+        .tool-option {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -117,14 +113,19 @@
             text-decoration: none;
             transition: all 0.3s;
             cursor: pointer;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1rem;
         }
         
-        .tool-options a:hover, .tool-options a.active {
+        .tool-option:hover, .tool-option.active {
             background: var(--primary);
             color: white;
+            transform: translateX(5px);
         }
         
-        .tool-options i {
+        .tool-option i {
             font-size: 1.2rem;
             width: 24px;
             text-align: center;
@@ -233,64 +234,17 @@
             background: #f8f9fa;
             border-radius: 10px;
             margin-bottom: 10px;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
         }
         
         .file-info {
             display: flex;
             align-items: center;
             gap: 15px;
-            flex: 1;
         }
         
         .file-info i {
             color: var(--danger);
             font-size: 1.5rem;
-        }
-        
-        .file-details {
-            flex: 1;
-        }
-        
-        .file-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-            word-break: break-all;
-        }
-        
-        .file-size {
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .file-order {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-right: 15px;
-        }
-        
-        .order-btn {
-            background: #e5e7eb;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-        
-        .order-btn:hover {
-            background: var(--primary);
-            color: white;
         }
         
         .remove-btn {
@@ -304,12 +258,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
-        }
-        
-        .remove-btn:hover {
-            background: #dc2626;
-            transform: scale(1.1);
         }
         
         /* Action Buttons */
@@ -317,7 +265,6 @@
             display: flex;
             gap: 15px;
             margin-top: 25px;
-            flex-wrap: wrap;
         }
         
         .process-btn {
@@ -330,19 +277,11 @@
             cursor: pointer;
             transition: all 0.3s;
             font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         
-        .process-btn:hover:not(:disabled) {
+        .process-btn:hover {
             background: #0da271;
             transform: translateY(-2px);
-        }
-        
-        .process-btn:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
         }
         
         .reset-btn {
@@ -355,9 +294,6 @@
             cursor: pointer;
             transition: all 0.3s;
             font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         
         .reset-btn:hover {
@@ -391,18 +327,6 @@
             font-size: 1rem;
         }
         
-        .radio-group {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
         /* Result Area */
         .result-area {
             margin-top: 30px;
@@ -411,111 +335,25 @@
             border-radius: 15px;
             border-left: 5px solid var(--primary);
             display: none;
-            animation: fadeIn 0.5s ease;
         }
         
         .result-area.show {
             display: block;
         }
         
-        .result-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .result-header i {
-            color: var(--success);
-            font-size: 1.5rem;
-        }
-        
-        .result-header h4 {
-            color: var(--secondary);
-            font-size: 1.2rem;
-        }
-        
-        .result-info {
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        
-        .result-actions {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
         .download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            display: inline-block;
             background: var(--success);
             color: white;
             padding: 12px 30px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.3s;
+            margin-top: 15px;
         }
         
         .download-btn:hover {
             background: #0da271;
-            transform: translateY(-2px);
-        }
-        
-        /* Progress Bar */
-        .progress-container {
-            margin: 20px 0;
-            display: none;
-        }
-        
-        .progress-bar {
-            height: 10px;
-            background: #e5e7eb;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        
-        .progress-text {
-            text-align: center;
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        /* Status Messages */
-        .status-message {
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            display: none;
-        }
-        
-        .status-success {
-            background: #d1fae5;
-            color: #065f46;
-            border-left: 4px solid var(--success);
-        }
-        
-        .status-error {
-            background: #fee2e2;
-            color: #991b1b;
-            border-left: 4px solid var(--danger);
-        }
-        
-        .status-info {
-            background: #dbeafe;
-            color: #1e40af;
-            border-left: 4px solid var(--primary);
         }
         
         footer {
@@ -534,7 +372,6 @@
             color: var(--primary);
             text-decoration: none;
             margin: 0 10px;
-            transition: all 0.3s;
         }
         
         .footer-links a:hover {
@@ -559,15 +396,6 @@
                 display: inline-block;
                 margin-bottom: 15px;
             }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .action-buttons button {
-                width: 100%;
-                justify-content: center;
-            }
         }
     </style>
 </head>
@@ -585,25 +413,14 @@
             <div class="sidebar">
                 <h3>PDF Tools</h3>
                 <ul class="tool-options">
-                    <li><a href="#merge" class="active" data-tool="merge"><i class="fas fa-layer-group"></i> Merge PDF</a></li>
-                    <li><a href="#split" data-tool="split"><i class="fas fa-cut"></i> Split PDF</a></li>
-                    <li><a href="#pdf-to-word" data-tool="pdf-to-word"><i class="fas fa-file-word"></i> PDF to Word</a></li>
-                    <li><a href="#word-to-pdf" data-tool="word-to-pdf"><i class="fas fa-file-pdf"></i> Word to PDF</a></li>
-                    <li><a href="#compress" data-tool="compress"><i class="fas fa-compress-alt"></i> Compress PDF</a></li>
-                    <li><a href="#convert" data-tool="convert"><i class="fas fa-exchange-alt"></i> Convert Images</a></li>
-                    <li><a href="#watermark" data-tool="watermark"><i class="fas fa-tint"></i> Watermark PDF</a></li>
+                    <li><button class="tool-option active" data-tool="merge"><i class="fas fa-layer-group"></i> Merge PDF</button></li>
+                    <li><button class="tool-option" data-tool="split"><i class="fas fa-cut"></i> Split PDF</button></li>
+                    <li><button class="tool-option" data-tool="pdf-to-word"><i class="fas fa-file-word"></i> PDF to Word</button></li>
+                    <li><button class="tool-option" data-tool="word-to-pdf"><i class="fas fa-file-pdf"></i> Word to PDF</button></li>
+                    <li><button class="tool-option" data-tool="compress"><i class="fas fa-compress-alt"></i> Compress PDF</button></li>
+                    <li><button class="tool-option" data-tool="convert"><i class="fas fa-exchange-alt"></i> Convert Images</button></li>
+                    <li><button class="tool-option" data-tool="watermark"><i class="fas fa-tint"></i> Watermark PDF</button></li>
                 </ul>
-                
-                <div style="margin-top: 30px; padding: 15px; background: #f0f7ff; border-radius: 10px;">
-                    <h4 style="color: var(--secondary); margin-bottom: 10px; font-size: 1rem;"><i class="fas fa-info-circle"></i> How it works</h4>
-                    <p style="color: #666; font-size: 0.9rem; line-height: 1.5;">
-                        1. Select a tool from the left<br>
-                        2. Upload your files<br>
-                        3. Configure options<br>
-                        4. Process and download<br>
-                        <strong>All processing happens in your browser - your files never leave your device!</strong>
-                    </p>
-                </div>
             </div>
             
             <div class="main-content">
@@ -611,7 +428,7 @@
                 <div id="merge-tool" class="tool-section active">
                     <div class="tool-header">
                         <h2><i class="fas fa-layer-group"></i> Merge PDF Files</h2>
-                        <p>Combine multiple PDF documents into a single file. Drag and drop to rearrange the order.</p>
+                        <p>Combine multiple PDF documents into a single file.</p>
                     </div>
                     
                     <div class="upload-area" id="merge-upload-area">
@@ -625,42 +442,123 @@
                     </div>
                     
                     <div class="file-list" id="merge-file-list">
-                        <div class="empty-state" style="text-align: center; padding: 40px; color: #666;">
+                        <div style="text-align: center; padding: 40px; color: #666;">
                             <i class="fas fa-file-pdf" style="font-size: 3rem; margin-bottom: 15px; color: #e5e7eb;"></i>
                             <p>No files selected yet. Upload PDF files to merge.</p>
                         </div>
                     </div>
                     
-                    <div class="progress-container" id="merge-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="merge-progress-fill"></div>
-                        </div>
-                        <div class="progress-text" id="merge-progress-text">Processing...</div>
-                    </div>
-                    
-                    <div class="status-message" id="merge-status"></div>
-                    
                     <div class="action-buttons">
-                        <button class="process-btn" id="merge-btn" onclick="processMerge()">
+                        <button class="process-btn" id="merge-btn">
                             <i class="fas fa-layer-group"></i> Merge PDFs
                         </button>
-                        <button class="reset-btn" onclick="resetMerge()">
+                        <button class="reset-btn" id="merge-reset-btn">
                             <i class="fas fa-redo"></i> Reset
                         </button>
                     </div>
                     
                     <div class="result-area" id="merge-result">
-                        <div class="result-header">
-                            <i class="fas fa-check-circle"></i>
-                            <h4>PDFs Merged Successfully!</h4>
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> PDFs Merged Successfully!</h4>
+                        <p>Your files have been combined into a single PDF document. Click below to download.</p>
+                        <a href="#" class="download-btn" id="merge-download-btn"><i class="fas fa-download"></i> Download Merged PDF</a>
+                    </div>
+                </div>
+                
+                <!-- Split PDF Tool -->
+                <div id="split-tool" class="tool-section">
+                    <div class="tool-header">
+                        <h2><i class="fas fa-cut"></i> Split PDF File</h2>
+                        <p>Extract specific pages or split a PDF into multiple documents.</p>
+                    </div>
+                    
+                    <div class="upload-area">
+                        <i class="fas fa-cut"></i>
+                        <h4>Upload PDF to split</h4>
+                        <p>Select a PDF file to extract pages from</p>
+                        <input type="file" id="split-file-input" accept=".pdf" style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('split-file-input').click()">Select PDF File</button>
+                    </div>
+                    
+                    <div class="options-section">
+                        <div class="option-group">
+                            <label>Split Options</label>
+                            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                                <div style="flex: 1; min-width: 200px;">
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Split by Pages</label>
+                                    <input type="text" id="split-pages" class="option-input" placeholder="e.g., 1-3, 5, 7-10">
+                                    <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">Enter page ranges separated by commas</p>
+                                </div>
+                            </div>
                         </div>
-                        <p class="result-info" id="merge-result-info">Your files have been combined into a single PDF document. Click below to download.</p>
-                        <div class="result-actions">
-                            <a href="#" class="download-btn" id="merge-download-btn" download="merged-document.pdf">
-                                <i class="fas fa-download"></i> Download Merged PDF
-                            </a>
-                            <button class="reset-btn" onclick="resetMerge()">
-                                <i class="fas fa-plus"></i> Merge More Files
-                            </button>
-                        </div>
-         
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="process-btn" id="split-btn"><i class="fas fa-cut"></i> Split PDF</button>
+                        <button class="reset-btn" id="split-reset-btn"><i class="fas fa-redo"></i> Reset</button>
+                    </div>
+                </div>
+                
+                <!-- PDF to Word Tool -->
+                <div id="pdf-to-word-tool" class="tool-section">
+                    <div class="tool-header">
+                        <h2><i class="fas fa-file-word"></i> PDF to Word Converter</h2>
+                        <p>Convert PDF documents to editable Word (.docx) format.</p>
+                    </div>
+                    
+                    <div class="upload-area">
+                        <i class="fas fa-file-word"></i>
+                        <h4>Upload PDF to convert</h4>
+                        <p>Convert PDF to editable Word document</p>
+                        <input type="file" id="pdf-to-word-input" accept=".pdf" style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('pdf-to-word-input').click()">Select PDF File</button>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="process-btn" id="pdf-to-word-btn"><i class="fas fa-exchange-alt"></i> Convert to Word</button>
+                        <button class="reset-btn" id="pdf-to-word-reset-btn"><i class="fas fa-redo"></i> Reset</button>
+                    </div>
+                </div>
+                
+                <!-- Word to PDF Tool -->
+                <div id="word-to-pdf-tool" class="tool-section">
+                    <div class="tool-header">
+                        <h2><i class="fas fa-file-pdf"></i> Word to PDF Converter</h2>
+                        <p>Convert Word documents (.doc, .docx) to PDF format.</p>
+                    </div>
+                    
+                    <div class="upload-area">
+                        <i class="fas fa-file-pdf"></i>
+                        <h4>Upload Word documents</h4>
+                        <p>Supported formats: .doc, .docx</p>
+                        <input type="file" id="word-to-pdf-input" accept=".doc,.docx" multiple style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('word-to-pdf-input').click()">Select Word Files</button>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="process-btn" id="word-to-pdf-btn"><i class="fas fa-exchange-alt"></i> Convert to PDF</button>
+                        <button class="reset-btn" id="word-to-pdf-reset-btn"><i class="fas fa-redo"></i> Reset</button>
+                    </div>
+                </div>
+                
+                <!-- Compress PDF Tool -->
+                <div id="compress-tool" class="tool-section">
+                    <div class="tool-header">
+                        <h2><i class="fas fa-compress-alt"></i> Compress PDF</h2>
+                        <p>Reduce PDF file size while maintaining quality.</p>
+                    </div>
+                    
+                    <div class="upload-area">
+                        <i class="fas fa-compress-alt"></i>
+                        <h4>Upload PDF to compress</h4>
+                        <p>Reduce file size for easier sharing and storage</p>
+                        <input type="file" id="compress-file-input" accept=".pdf" style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('compress-file-input').click()">Select PDF File</button>
+                    </div>
+                    
+                    <div class="options-section">
+                        <div class="option-group">
+                            <label>Compression Level</label>
+                            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                                <div style="flex: 1; min-width: 200px;">
+                                    <label style="display: block; margin-bottom: 10px;">
+                                        <input 
