@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Tools - Smart Tools Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PDF-Lib Library -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -279,9 +281,14 @@
             font-size: 1rem;
         }
         
-        .process-btn:hover {
+        .process-btn:hover:not(:disabled) {
             background: #0da271;
             transform: translateY(-2px);
+        }
+        
+        .process-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
         }
         
         .reset-btn {
@@ -356,6 +363,32 @@
             background: #0da271;
         }
         
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         footer {
             text-align: center;
             padding: 25px;
@@ -396,6 +429,14 @@
                 display: inline-block;
                 margin-bottom: 15px;
             }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-buttons button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -404,7 +445,7 @@
         <div class="container">
             <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
             <h1>PDF Tools</h1>
-            <p>Merge, split, convert, compress, and manage PDF files. All processing done securely in your browser.</p>
+            <p>Merge, split, compress, watermark, and convert images to PDF. All processing done securely in your browser.</p>
         </div>
     </header>
     
@@ -415,12 +456,21 @@
                 <ul class="tool-options">
                     <li><button class="tool-option active" data-tool="merge"><i class="fas fa-layer-group"></i> Merge PDF</button></li>
                     <li><button class="tool-option" data-tool="split"><i class="fas fa-cut"></i> Split PDF</button></li>
-                    <li><button class="tool-option" data-tool="pdf-to-word"><i class="fas fa-file-word"></i> PDF to Word</button></li>
-                    <li><button class="tool-option" data-tool="word-to-pdf"><i class="fas fa-file-pdf"></i> Word to PDF</button></li>
                     <li><button class="tool-option" data-tool="compress"><i class="fas fa-compress-alt"></i> Compress PDF</button></li>
-                    <li><button class="tool-option" data-tool="convert"><i class="fas fa-exchange-alt"></i> Convert Images</button></li>
                     <li><button class="tool-option" data-tool="watermark"><i class="fas fa-tint"></i> Watermark PDF</button></li>
+                    <li><button class="tool-option" data-tool="convert"><i class="fas fa-exchange-alt"></i> Images to PDF</button></li>
                 </ul>
+                
+                <div style="margin-top: 30px; padding: 15px; background: #f0f7ff; border-radius: 10px;">
+                    <h4 style="color: var(--secondary); margin-bottom: 10px; font-size: 1rem;"><i class="fas fa-info-circle"></i> How it works</h4>
+                    <p style="color: #666; font-size: 0.9rem; line-height: 1.5;">
+                        1. Select a tool from the left<br>
+                        2. Upload your files<br>
+                        3. Configure options<br>
+                        4. Process and download<br>
+                        <strong>All processing happens in your browser - your files never leave your device!</strong>
+                    </p>
+                </div>
             </div>
             
             <div class="main-content">
@@ -436,7 +486,7 @@
                         <h4>Drop PDF files here</h4>
                         <p>or click to browse (Maximum 10 files, 50MB each)</p>
                         <input type="file" id="merge-file-input" accept=".pdf" multiple style="display: none;">
-                        <button class="upload-btn" onclick="document.getElementById('merge-file-input').click()">
+                        <button class="upload-btn" id="merge-upload-btn">
                             <i class="fas fa-folder-open"></i> Select PDF Files
                         </button>
                     </div>
@@ -446,6 +496,11 @@
                             <i class="fas fa-file-pdf" style="font-size: 3rem; margin-bottom: 15px; color: #e5e7eb;"></i>
                             <p>No files selected yet. Upload PDF files to merge.</p>
                         </div>
+                    </div>
+                    
+                    <div class="loading" id="merge-loading">
+                        <div class="spinner"></div>
+                        <p>Merging PDF files...</p>
                     </div>
                     
                     <div class="action-buttons">
@@ -468,75 +523,41 @@
                 <div id="split-tool" class="tool-section">
                     <div class="tool-header">
                         <h2><i class="fas fa-cut"></i> Split PDF File</h2>
-                        <p>Extract specific pages or split a PDF into multiple documents.</p>
+                        <p>Extract specific pages from a PDF document.</p>
                     </div>
                     
-                    <div class="upload-area">
+                    <div class="upload-area" id="split-upload-area">
                         <i class="fas fa-cut"></i>
                         <h4>Upload PDF to split</h4>
                         <p>Select a PDF file to extract pages from</p>
                         <input type="file" id="split-file-input" accept=".pdf" style="display: none;">
-                        <button class="upload-btn" onclick="document.getElementById('split-file-input').click()">Select PDF File</button>
+                        <button class="upload-btn" id="split-upload-btn">Select PDF File</button>
                     </div>
+                    
+                    <div class="file-list" id="split-file-list"></div>
                     
                     <div class="options-section">
                         <div class="option-group">
-                            <label>Split Options</label>
-                            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                                <div style="flex: 1; min-width: 200px;">
-                                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Split by Pages</label>
-                                    <input type="text" id="split-pages" class="option-input" placeholder="e.g., 1-3, 5, 7-10">
-                                    <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">Enter page ranges separated by commas</p>
-                                </div>
-                            </div>
+                            <label for="split-pages">Pages to Extract (e.g., 1-3, 5, 7-10)</label>
+                            <input type="text" id="split-pages" class="option-input" placeholder="1-5, 10-15">
+                            <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">Enter page ranges separated by commas. Leave empty for all pages.</p>
                         </div>
+                    </div>
+                    
+                    <div class="loading" id="split-loading">
+                        <div class="spinner"></div>
+                        <p>Splitting PDF...</p>
                     </div>
                     
                     <div class="action-buttons">
                         <button class="process-btn" id="split-btn"><i class="fas fa-cut"></i> Split PDF</button>
                         <button class="reset-btn" id="split-reset-btn"><i class="fas fa-redo"></i> Reset</button>
                     </div>
-                </div>
-                
-                <!-- PDF to Word Tool -->
-                <div id="pdf-to-word-tool" class="tool-section">
-                    <div class="tool-header">
-                        <h2><i class="fas fa-file-word"></i> PDF to Word Converter</h2>
-                        <p>Convert PDF documents to editable Word (.docx) format.</p>
-                    </div>
                     
-                    <div class="upload-area">
-                        <i class="fas fa-file-word"></i>
-                        <h4>Upload PDF to convert</h4>
-                        <p>Convert PDF to editable Word document</p>
-                        <input type="file" id="pdf-to-word-input" accept=".pdf" style="display: none;">
-                        <button class="upload-btn" onclick="document.getElementById('pdf-to-word-input').click()">Select PDF File</button>
-                    </div>
-                    
-                    <div class="action-buttons">
-                        <button class="process-btn" id="pdf-to-word-btn"><i class="fas fa-exchange-alt"></i> Convert to Word</button>
-                        <button class="reset-btn" id="pdf-to-word-reset-btn"><i class="fas fa-redo"></i> Reset</button>
-                    </div>
-                </div>
-                
-                <!-- Word to PDF Tool -->
-                <div id="word-to-pdf-tool" class="tool-section">
-                    <div class="tool-header">
-                        <h2><i class="fas fa-file-pdf"></i> Word to PDF Converter</h2>
-                        <p>Convert Word documents (.doc, .docx) to PDF format.</p>
-                    </div>
-                    
-                    <div class="upload-area">
-                        <i class="fas fa-file-pdf"></i>
-                        <h4>Upload Word documents</h4>
-                        <p>Supported formats: .doc, .docx</p>
-                        <input type="file" id="word-to-pdf-input" accept=".doc,.docx" multiple style="display: none;">
-                        <button class="upload-btn" onclick="document.getElementById('word-to-pdf-input').click()">Select Word Files</button>
-                    </div>
-                    
-                    <div class="action-buttons">
-                        <button class="process-btn" id="word-to-pdf-btn"><i class="fas fa-exchange-alt"></i> Convert to PDF</button>
-                        <button class="reset-btn" id="word-to-pdf-reset-btn"><i class="fas fa-redo"></i> Reset</button>
+                    <div class="result-area" id="split-result">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> PDF Split Successfully!</h4>
+                        <p>Selected pages have been extracted. Click below to download.</p>
+                        <a href="#" class="download-btn" id="split-download-btn"><i class="fas fa-download"></i> Download Split PDF</a>
                     </div>
                 </div>
                 
@@ -547,13 +568,15 @@
                         <p>Reduce PDF file size while maintaining quality.</p>
                     </div>
                     
-                    <div class="upload-area">
+                    <div class="upload-area" id="compress-upload-area">
                         <i class="fas fa-compress-alt"></i>
                         <h4>Upload PDF to compress</h4>
                         <p>Reduce file size for easier sharing and storage</p>
                         <input type="file" id="compress-file-input" accept=".pdf" style="display: none;">
-                        <button class="upload-btn" onclick="document.getElementById('compress-file-input').click()">Select PDF File</button>
+                        <button class="upload-btn" id="compress-upload-btn">Select PDF File</button>
                     </div>
+                    
+                    <div class="file-list" id="compress-file-list"></div>
                     
                     <div class="options-section">
                         <div class="option-group">
@@ -561,4 +584,8 @@
                             <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                                 <div style="flex: 1; min-width: 200px;">
                                     <label style="display: block; margin-bottom: 10px;">
-                                        <input 
+                                        <input type="radio" name="compression" value="low" checked> Low (Best Quality)
+                                    </label>
+                                    <p style="font-size: 0.9rem; color: #666; margin-left: 20px;">Small size reduction, best quality</p>
+                                </div>
+                   
